@@ -6,7 +6,7 @@ export default function AssignmentEditor() {
 
             <textarea id="wd-description">
                 The assignment ia available online. Submit a link to the landing page of your Web application running
-                on Netlify. The landing page should include the following: Your full name and section Links to each of 
+                on Netlify. The landing page should include the following: Your full name and section Links to each of
                 the lab assignments. Link to the Kanbas application. Links to all relevant source code repositories.
                 The Kanbas application should include a link to navigate back to the landing page.
             </textarea><br /><br />
@@ -84,41 +84,17 @@ export default function AssignmentEditor() {
                     </td>
                 </tr>
             </table>
-
-
-
-            {/* gpt */}
-            {/* <table>
+            <hr />
+            <table width="100%">
                 <tr>
+                    <td></td>
+                    <td></td>
                     <td style={{ textAlign: 'right' }}>
-                        <label htmlFor="wd-assign-to">Assign to</label>
-                    </td>
-                    <td>
-                        <input id="wd-assign-to" value="Everyone" style={{ marginLeft: '10px' }}></input>
+                        <button>Cancel</button>
+                        <button>Save</button>
                     </td>
                 </tr>
-
-                <tr>
-                    <td style={{ textAlign: 'right' }}>
-                        <label htmlFor="wd-due-date">Assign Due</label>
-                    </td>
-                    <td>
-                        <input id="wd-due-date" value="2024-05-13" type="date" style={{ marginLeft: '10px' }}></input>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td style={{ textAlign: 'right' }}>
-                        <label htmlFor="wd-available-from">Available from</label>
-                    </td>
-                    <td>
-                        <input id="wd-available-from" value="2024-05-06" type="date" style={{ marginLeft: '10px' }}></input>
-                        <label htmlFor="wd-available-until" style={{ marginLeft: '20px' }}>Available until</label>
-                        <input id="wd-available-until" value="2024-05-20" type="date" style={{ marginLeft: '10px' }}></input>
-                    </td>
-                </tr>
-            </table> */}
-
+            </table>
         </div>
     )
 }
