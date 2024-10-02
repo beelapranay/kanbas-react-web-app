@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "../styles.css";
 import { FaChevronDown } from "react-icons/fa";
 
@@ -144,15 +145,20 @@ export default function AssignmentEditor() {
                                         <input id="wd-available-until" value="2024-05-20" type="date" className="form-control" />
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div><br />
 
+
                 </div>
                 <hr />
 
-                <button id="wd-collapse-all" className="btn btn-md btn-secondary me-1 float-end">
-                    Save</button>
+                <Link to="/Kanbas">
+                    <button id="wd-collapse-all" className="btn btn-md btn-secondary me-1 float-end">
+                        Save
+                    </button>
+                </Link>
                 <button id="wd-view-progress" className="btn btn-md btn-danger me-1 float-end">
                     Cancel</button>
             </div>

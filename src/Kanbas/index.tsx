@@ -7,6 +7,7 @@ import Labs from "../Labs";
 import Calendar from "./Calendar";
 import Inbox from "./Inbox";
 import "./styles.css";
+import Settings from "./Settings";
 
 export default function Kanbas() {
     return (
@@ -20,6 +21,7 @@ export default function Kanbas() {
                     <Route path="/Calendar" element={<Calendar />} />
                     <Route path="/Inbox" element={<Inbox />} />
                     <Route path="/Courses/:cid/*" element={<Courses />} />
+                    <Route path="/Settings" element={<Settings />} />
                 </Routes>
             </div>
         </div>

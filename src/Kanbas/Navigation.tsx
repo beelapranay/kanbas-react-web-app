@@ -55,13 +55,13 @@ export default function KanbasNavigation() {
                 <FaInbox className="fs-1 text-danger" /><br />
                 Inbox </NavLink>
 
-            <NavLink to="/Kanbas/Help" id="wd-help-link"
+            <NavLink to="/Kanbas/Settings" id="wd-help-link"
                 className={({ isActive }) => isActive
                 ? "list-group-item text-center border-0 bg-white text-danger"
                 : "list-group-item text-center border-0 bg-black text-white"
             }>
                 <LiaCogSolid className="fs-1 text-danger" /><br />
-                Help </NavLink>
+                Settings </NavLink>
         </div>
     );
 }
