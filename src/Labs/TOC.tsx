@@ -1,5 +1,6 @@
 import { useLocation } from "react-router";
 export default function TOC() {
+    // TOC Index
     const { pathname } = useLocation();
     return (
         <ul className="nav nav-pills">
