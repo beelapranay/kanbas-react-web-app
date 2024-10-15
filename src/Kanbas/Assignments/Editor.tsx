@@ -1,13 +1,38 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import "../styles.css";
 import { FaChevronDown } from "react-icons/fa";
+import * as db from "../Database";
+import { FaRegCalendar } from "react-icons/fa";
 
 export default function AssignmentEditor() {
+    const { cid, aid } = useParams();
+    const courseAssignment = db.assignments.find(
+        assignment => assignment._id === aid
+    );
+    const navigate = useNavigate();
+
+    //doubt
+    const handleBackClick = () => {
+        window.location.assign(`/#/Kanbas/Courses/${cid}/Assignments`);
+    };
+
+    const formatDueDate = (dueDate: any) => {
+        const date = new Date(dueDate);
+
+        if (isNaN(date.getTime())) {
+            return 'Invalid Date';
+        }
+
+        const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
+
+        return date.toLocaleDateString('en-GB', options);
+    }
+
     return (
         <div className="container">
             <div id="wd-assignments-editor">
-                <label htmlFor="wd-name"><h5>Assignment Name</h5></label><br />
-                <input id="wd-name" value="A1" className="form-control" /><br />
+                <label htmlFor="wd-name">Assignment Name</label><br />
+                <input id="wd-name" value={`${courseAssignment?.title}`} className="form-control" /><br />
 
 
                 <div id="wd-description" className="p-3 border rounded">
@@ -39,7 +64,7 @@ export default function AssignmentEditor() {
                             <label htmlFor="wd-points" className="form-label">Points</label>
                         </div>
                         <div className="col-md-10 col-12 d-flex align-items-center position-relative">
-                            <input id="wd-points" value="100" className="form-control" />
+                            <input id="wd-points" value={`${courseAssignment?.points}`} className="form-control" />
                             <FaChevronDown
                                 className="position-absolute"
                                 style={{ right: '30px' }}
@@ -135,14 +160,32 @@ export default function AssignmentEditor() {
                                     </div>
                                 </div>
 
+                                <div className="col-md-6 mb-3">
+                                    <label htmlFor="wd-available-from"><b>Due</b></label>
+                                    <div className="input-group">
+                                        <input
+                                            id="wd-available-from"
+                                            value={`${formatDueDate(courseAssignment?.due)}, 11:59 PM`}
+                                            className="form-control"
+                                            readOnly
+                                        />
+                                        <div className="input-group-append">
+                                            <span className="input-group-text fs-4">
+                                                <FaRegCalendar />
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+
                                 <div className="row">
                                     <div className="col-md-6 mb-3">
                                         <label htmlFor="wd-available-from"><b>Available from</b></label>
-                                        <input id="wd-available-from" value="2024-05-06" type="date" className="form-control" />
+                                        <input id="wd-available-from" value={`${courseAssignment?.from}`} type="date" className="form-control" />
                                     </div>
                                     <div className="col-md-6 mb-3">
                                         <label htmlFor="wd-available-until"><b>Until</b></label>
-                                        <input id="wd-available-until" value="2024-05-20" type="date" className="form-control" />
+                                        <input id="wd-available-until" value={`${courseAssignment?.to}`} type="date" className="form-control" />
                                     </div>
                                 </div>
 
@@ -153,14 +196,15 @@ export default function AssignmentEditor() {
 
                 </div>
                 <hr />
-
-                <Link to="/Kanbas">
-                    <button id="wd-collapse-all" className="btn btn-md btn-secondary me-1 float-end">
-                        Save
-                    </button>
+                <Link to={`/Kanbas/Courses/${cid}/Assignments`}
+                    className="btn btn-md btn-secondary me-1 float-end">
+                    Save
                 </Link>
-                <button id="wd-view-progress" className="btn btn-md btn-danger me-1 float-end">
-                    Cancel</button>
+
+                <Link to={`/Kanbas/Courses/${cid}/Assignments`}
+                    className="btn btn-md btn-danger me-1 float-end">
+                    Cancel
+                </Link>
             </div>
         </div>
     )

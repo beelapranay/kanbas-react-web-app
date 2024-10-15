@@ -1,5 +1,7 @@
+import { useParams } from "react-router";
 import Modules from "../Modules";
 import CourseStatus from "./Status";
+import { courses } from "../../Database";
 
 export default function Home() {
     return (
