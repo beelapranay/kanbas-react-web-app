@@ -1,4 +1,4 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import "../styles.css";
 import { FaChevronDown } from "react-icons/fa";
 import * as db from "../Database";
@@ -9,12 +9,6 @@ export default function AssignmentEditor() {
     const courseAssignment = db.assignments.find(
         assignment => assignment._id === aid
     );
-    const navigate = useNavigate();
-
-    //doubt
-    const handleBackClick = () => {
-        window.location.assign(`/#/Kanbas/Courses/${cid}/Assignments`);
-    };
 
     const formatDueDate = (dueDate: any) => {
         const date = new Date(dueDate);
@@ -164,8 +158,8 @@ export default function AssignmentEditor() {
                                     <label htmlFor="wd-available-from"><b>Due</b></label>
                                     <div className="input-group">
                                         <input
-                                            id="wd-available-from"
-                                            value={`${formatDueDate(courseAssignment?.due)}, 11:59 PM`}
+                                            id="wd-due"
+                                            value={`${formatDueDate(courseAssignment?.to)}, 11:59 PM`}
                                             className="form-control"
                                             readOnly
                                         />

@@ -8,12 +8,24 @@ import { useParams } from "react-router-dom";
 import * as db from "../Database"
 
 export default function Assignments() {
-    const { cid, aid } = useParams();
+    const { cid } = useParams();
     const assignments = db.assignments;
 
     const courseAssignments = assignments.filter(
         assignment => assignment.course === cid
     );
+
+    const formatDate = (givenDate: any) => {
+        const date = new Date(givenDate);
+
+        if (isNaN(date.getTime())) {
+            return 'Invalid Date';
+        }
+
+        const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long'};
+
+        return date.toLocaleDateString('en-GB', options);
+    }
 
     return (
         <div id="wd-assignments">
@@ -46,10 +58,10 @@ export default function Assignments() {
                                                 </a>
                                                 <p className="mb-1">
                                                     <span className="text-danger">Multiple Modules</span> |
-                                                    <span> Not available until May 6 at 12:00am | </span>
+                                                    <span> {`Not available until ${formatDate(assignment.from)} at 12:00am`} | </span>
                                                 </p>
                                                 <p className="mb-0">
-                                                    <span className="fw-bold">Due</span> May 13 at 11:59pm | 100 pts
+                                                    <span className="fw-bold">Due</span> {`${formatDate(assignment.to)}`} at 11:59pm | 100 pts
                                                 </p>
                                             </div>
                                         </div>
