@@ -1,56 +1,101 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import "../styles.css";
 import { FaChevronDown } from "react-icons/fa";
-import * as db from "../Database";
-import { FaRegCalendar } from "react-icons/fa";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addAssignment, updateAssignment } from "./reducer";
 
 export default function AssignmentEditor() {
     const { cid, aid } = useParams();
-    const courseAssignment = db.assignments.find(
-        assignment => assignment._id === aid
+    const assignments = useSelector((state: any) => state.assignmentReducer.assignments);
+    const courseAssignment = assignments.find(
+        (assignment: any) => assignment._id === aid
     );
 
-    const formatDueDate = (dueDate: any) => {
-        const date = new Date(dueDate);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-        if (isNaN(date.getTime())) {
-            return 'Invalid Date';
+    const [_id, setId] = useState(courseAssignment?._id || "")
+    const [title, setTitle] = useState(courseAssignment?.title || "");
+    const [description, setDescription] = useState(courseAssignment?.description || `
+    The assignment is available online.
+
+    Submit a link to the landing page of your Web application running on Netlify.
+    
+    The landing page should include the following:
+    - Your full name and section
+    - Links to each of the lab assignments
+    - Link to the Kanbas application
+    - Links to all relevant source code repositories
+    
+    The Kanbas application should include a link to navigate back to the landing page.    
+    `);
+    const [points, setPoints] = useState(courseAssignment?.points || "");
+    const [from, setFrom] = useState(courseAssignment?.from || "");
+    const [to, setTo] = useState(courseAssignment?.to || "");
+    const [due, setDue] = useState(courseAssignment?.due || "");
+
+    // const formatDueDate = (dueDate: any) => {
+    //     const date = new Date(dueDate);
+
+    //     if (isNaN(date.getTime())) {
+    //         return "";
+    //     }
+
+    //     const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
+
+    //     return date.toLocaleDateString('en-GB', options);
+    // }
+
+    const handleSaveOrUpdate = () => {
+        const assignmentData = {
+            _id: _id || "",
+            title,
+            course: cid,
+            description,
+            points,
+            from,
+            to,
+            due
+        };
+
+        if (courseAssignment !== undefined) {
+            dispatch(updateAssignment(assignmentData));
+        } else {
+            dispatch(addAssignment(assignmentData));
         }
 
-        const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
-
-        return date.toLocaleDateString('en-GB', options);
-    }
+        navigate(`/Kanbas/Courses/${cid}/Assignments`);
+    };
 
     return (
         <div className="container">
             <div id="wd-assignments-editor">
                 <label htmlFor="wd-name">Assignment Name</label><br />
-                <input id="wd-name" value={`${courseAssignment?.title}`} className="form-control" /><br />
+                <input
+                    id="wd-name"
+                    value={`${title}`}
+                    className="form-control"
+                    onChange={(e) => setTitle(e.target.value)} />
+                <br />
+
+                <label htmlFor="wd-id">Assignment ID</label><br />
+                <input
+                    id="wd-id"
+                    value={`${_id}`}
+                    className="form-control"
+                    onChange={(e) => setId(e.target.value)} />
+                <br />
 
 
-                <div id="wd-description" className="p-3 border rounded">
-                    <p>
-                        The assignment is <span className="text-danger">available online</span>
-                    </p>
-                    <p>
-                        Submit a link to the landing page of your Web application running on Netlify.
-                    </p>
-                    <p>
-                        The landing page should include the following:
-                    </p>
-                    <ul>
-                        <li>Your full name and section</li>
-                        <li>Links to each of the lab assignments</li>
-                        <li>
-                            Link to the Kanbas application
-                        </li>
-                        <li>Links to all relevant source code repositories</li>
-                    </ul>
-                    <p>
-                        The Kanbas application should include a link to navigate back to the landing page.
-                    </p>
-                </div>
+                <textarea 
+                    id="wd-description"
+                    value={`${description}`}
+                    className="form-control"
+                    style={{ width: "100%", height: "300px" }}
+                    onChange={(e) => setDescription(e.target.value)}>
+                    
+                </textarea>
 
                 <div className="mt-4">
                     <div className="row">
@@ -58,7 +103,11 @@ export default function AssignmentEditor() {
                             <label htmlFor="wd-points" className="form-label">Points</label>
                         </div>
                         <div className="col-md-10 col-12 d-flex align-items-center position-relative">
-                            <input id="wd-points" value={`${courseAssignment?.points}`} className="form-control" />
+                            <input
+                                id="wd-points"
+                                value={`${points}`}
+                                className="form-control"
+                                onChange={(e) => setPoints(e.target.value)} />
                             <FaChevronDown
                                 className="position-absolute"
                                 style={{ right: '30px' }}
@@ -155,19 +204,13 @@ export default function AssignmentEditor() {
                                 </div>
 
                                 <div className="col-md-6 mb-3">
-                                    <label htmlFor="wd-available-from"><b>Due</b></label>
+                                    <label htmlFor="wd-due"><b>Due</b></label>
                                     <div className="input-group">
                                         <input
                                             id="wd-due"
-                                            value={`${formatDueDate(courseAssignment?.to)}, 11:59 PM`}
+                                            value={`${due}`} type="date"
                                             className="form-control"
-                                            readOnly
-                                        />
-                                        <div className="input-group-append">
-                                            <span className="input-group-text fs-4">
-                                                <FaRegCalendar />
-                                            </span>
-                                        </div>
+                                            onChange={(e) => setDue(e.target.value)} />
                                     </div>
                                 </div>
 
@@ -175,11 +218,19 @@ export default function AssignmentEditor() {
                                 <div className="row">
                                     <div className="col-md-6 mb-3">
                                         <label htmlFor="wd-available-from"><b>Available from</b></label>
-                                        <input id="wd-available-from" value={`${courseAssignment?.from}`} type="date" className="form-control" />
+                                        <input
+                                            id="wd-available-from"
+                                            value={`${from}`} type="date"
+                                            className="form-control"
+                                            onChange={(e) => setFrom(e.target.value)} />
                                     </div>
                                     <div className="col-md-6 mb-3">
                                         <label htmlFor="wd-available-until"><b>Until</b></label>
-                                        <input id="wd-available-until" value={`${courseAssignment?.to}`} type="date" className="form-control" />
+                                        <input
+                                            id="wd-available-until"
+                                            value={`${to}`} type="date"
+                                            className="form-control"
+                                            onChange={(e) => setTo(e.target.value)} />
                                     </div>
                                 </div>
 
@@ -190,10 +241,11 @@ export default function AssignmentEditor() {
 
                 </div>
                 <hr />
-                <Link to={`/Kanbas/Courses/${cid}/Assignments`}
-                    className="btn btn-md btn-secondary me-1 float-end">
+                <div
+                    className="btn btn-md btn-secondary me-1 float-end"
+                    onClick={handleSaveOrUpdate}>
                     Save
-                </Link>
+                </div>
 
                 <Link to={`/Kanbas/Courses/${cid}/Assignments`}
                     className="btn btn-md btn-danger me-1 float-end">

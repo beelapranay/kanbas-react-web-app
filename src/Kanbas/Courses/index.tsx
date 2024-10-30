@@ -9,9 +9,8 @@ import PeopleTable from "../People/Table";
 import Piazza from "../Piazza";
 import Zoom from "../Zoom";
 import Quizzes from "../Quizzes";
-import { courses } from "../Database";
 
-export default function Courses() {
+export default function Courses({ courses }: { courses: any[]; }) {
     const { cid } = useParams();
     const { pathname } = useLocation();
     const course = courses.find(
