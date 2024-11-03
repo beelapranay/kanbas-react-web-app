@@ -31,9 +31,9 @@ export default function AssignmentEditor() {
     The Kanbas application should include a link to navigate back to the landing page.    
     `);
     const [points, setPoints] = useState(courseAssignment?.points || "");
-    const [from, setFrom] = useState(courseAssignment?.from || "");
-    const [to, setTo] = useState(courseAssignment?.to || "");
-    const [due, setDue] = useState(courseAssignment?.due || "");
+    const [from, setFrom] = useState(courseAssignment?.from || "2024-05-01");
+    const [to, setTo] = useState(courseAssignment?.to || "2024-05-15");
+    const [due, setDue] = useState(courseAssignment?.due || "2024-05-16");
 
     // const formatDueDate = (dueDate: any) => {
     //     const date = new Date(dueDate);
@@ -76,7 +76,8 @@ export default function AssignmentEditor() {
                     id="wd-name"
                     value={`${title}`}
                     className="form-control"
-                    onChange={(e) => setTitle(e.target.value)} />
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="New Assignment Name" />
                 <br />
 
                 <label htmlFor="wd-id">Assignment ID</label><br />
@@ -84,7 +85,8 @@ export default function AssignmentEditor() {
                     id="wd-id"
                     value={`${_id}`}
                     className="form-control"
-                    onChange={(e) => setId(e.target.value)} />
+                    onChange={(e) => setId(e.target.value)} 
+                    placeholder="New Assignment Name" />
                 <br />
 
 
@@ -107,7 +109,8 @@ export default function AssignmentEditor() {
                                 id="wd-points"
                                 value={`${points}`}
                                 className="form-control"
-                                onChange={(e) => setPoints(e.target.value)} />
+                                onChange={(e) => setPoints(e.target.value)} 
+                                placeholder="New Assignment Points" />
                             <FaChevronDown
                                 className="position-absolute"
                                 style={{ right: '30px' }}

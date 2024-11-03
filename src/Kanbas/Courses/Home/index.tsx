@@ -12,11 +12,9 @@ export default function Home() {
             <div className="flex-fill">
                 <Modules />
             </div>
-            {isFaculty && (
-                <div className="d-none d-lg-block">
-                    <CourseStatus />
-                </div>
-            )}
+            <div className="d-none d-lg-block">
+                <CourseStatus />
+            </div>
         </div>
     )
 }

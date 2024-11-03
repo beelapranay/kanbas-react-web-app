@@ -31,7 +31,7 @@ export default function Kanbas() {
             _id: new Date().getTime().toString()
         };
 
-        setCourses([...courses, { ...course, ...newCourse }]);
+        setCourses([...courses, newCourse]);
     };
 
     const deleteCourse = (courseId: string) => {
