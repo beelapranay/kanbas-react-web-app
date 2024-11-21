@@ -4,6 +4,7 @@ import { FaChevronDown } from "react-icons/fa";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addAssignment, updateAssignment } from "./reducer";
+import { addAssignmentAPI, updateAssignmentAPI } from "./client";
 
 export default function AssignmentEditor() {
     const { cid, aid } = useParams();
@@ -15,57 +16,41 @@ export default function AssignmentEditor() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const [_id, setId] = useState(courseAssignment?._id || "")
-    const [title, setTitle] = useState(courseAssignment?.title || "");
-    const [description, setDescription] = useState(courseAssignment?.description || `
-    The assignment is available online.
+    const [assignmentData, setAssignmentData] = useState({
+        _id: courseAssignment?._id || "",
+        title: courseAssignment?.title || "",
+        description: courseAssignment?.description || "",
+        points: courseAssignment?.points || "",
+        from: courseAssignment?.from || "2024-05-01",
+        to: courseAssignment?.to || "2024-05-15",
+        due: courseAssignment?.due || "2024-05-16",
+    });
 
-    Submit a link to the landing page of your Web application running on Netlify.
-    
-    The landing page should include the following:
-    - Your full name and section
-    - Links to each of the lab assignments
-    - Link to the Kanbas application
-    - Links to all relevant source code repositories
-    
-    The Kanbas application should include a link to navigate back to the landing page.    
-    `);
-    const [points, setPoints] = useState(courseAssignment?.points || "");
-    const [from, setFrom] = useState(courseAssignment?.from || "2024-05-01");
-    const [to, setTo] = useState(courseAssignment?.to || "2024-05-15");
-    const [due, setDue] = useState(courseAssignment?.due || "2024-05-16");
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { id, value } = e.target;
+        setAssignmentData((prev) => ({ ...prev, [id]: value }));
+    };
 
-    // const formatDueDate = (dueDate: any) => {
-    //     const date = new Date(dueDate);
+    const handleSaveOrUpdate = async () => {
+        try {
+            if (courseAssignment) {
+                // Update assignment
+                const updatedAssignment = await updateAssignmentAPI(
+                    assignmentData._id,
+                    assignmentData
+                );
+                dispatch(updateAssignment(updatedAssignment));
+            } else {
+                // Add new assignment
+                const newAssignment = await addAssignmentAPI(cid!, assignmentData);
+                dispatch(addAssignment(newAssignment));
+            }
 
-    //     if (isNaN(date.getTime())) {
-    //         return "";
-    //     }
-
-    //     const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
-
-    //     return date.toLocaleDateString('en-GB', options);
-    // }
-
-    const handleSaveOrUpdate = () => {
-        const assignmentData = {
-            _id: _id || "",
-            title,
-            course: cid,
-            description,
-            points,
-            from,
-            to,
-            due
-        };
-
-        if (courseAssignment !== undefined) {
-            dispatch(updateAssignment(assignmentData));
-        } else {
-            dispatch(addAssignment(assignmentData));
+            navigate(`/Kanbas/Courses/${cid}/Assignments`);
+        } catch (error) {
+            console.error("Error saving assignment:", error);
+            alert("Failed to save the assignment. Please try again.");
         }
-
-        navigate(`/Kanbas/Courses/${cid}/Assignments`);
     };
 
     return (
@@ -73,31 +58,33 @@ export default function AssignmentEditor() {
             <div id="wd-assignments-editor">
                 <label htmlFor="wd-name">Assignment Name</label><br />
                 <input
-                    id="wd-name"
-                    value={`${title}`}
+                    id="title"
+                    value={assignmentData.title}
                     className="form-control"
-                    onChange={(e) => setTitle(e.target.value)}
-                    placeholder="New Assignment Name" />
+                    onChange={handleChange}
+                    placeholder="New Assignment Name"
+                />
                 <br />
 
                 <label htmlFor="wd-id">Assignment ID</label><br />
                 <input
-                    id="wd-id"
-                    value={`${_id}`}
+                    id="_id"
+                    value={assignmentData._id}
                     className="form-control"
-                    onChange={(e) => setId(e.target.value)} 
-                    placeholder="New Assignment Name" />
+                    onChange={handleChange}
+                    placeholder="Assignment ID"
+                />
                 <br />
 
 
-                <textarea 
-                    id="wd-description"
-                    value={`${description}`}
+                <textarea
+                    id="description"
+                    value={assignmentData.description}
                     className="form-control"
                     style={{ width: "100%", height: "300px" }}
-                    onChange={(e) => setDescription(e.target.value)}>
-                    
-                </textarea>
+                    onChange={handleChange}
+                    placeholder="Assignment Description"
+                ></textarea>
 
                 <div className="mt-4">
                     <div className="row">
@@ -106,17 +93,21 @@ export default function AssignmentEditor() {
                         </div>
                         <div className="col-md-10 col-12 d-flex align-items-center position-relative">
                             <input
-                                id="wd-points"
-                                value={`${points}`}
+                                id="points"
+                                type="number"
+                                value={assignmentData.points || ""}
                                 className="form-control"
-                                onChange={(e) => setPoints(e.target.value)} 
-                                placeholder="New Assignment Points" />
-                            <FaChevronDown
-                                className="position-absolute"
-                                style={{ right: '30px' }}
+                                onChange={(e) =>
+                                    setAssignmentData((prev) => ({
+                                        ...prev,
+                                        points: e.target.value,
+                                    }))
+                                }
+                                placeholder="Assignment Points"
                             />
                         </div>
                     </div>
+
 
                     <div className="row mt-3">
                         <div className="col-md-2 col-12">
@@ -211,9 +202,10 @@ export default function AssignmentEditor() {
                                     <div className="input-group">
                                         <input
                                             id="wd-due"
-                                            value={`${due}`} type="date"
+                                            value={assignmentData.due}
+                                            type="date"
                                             className="form-control"
-                                            onChange={(e) => setDue(e.target.value)} />
+                                            onChange={handleChange} />
                                     </div>
                                 </div>
 
@@ -223,17 +215,19 @@ export default function AssignmentEditor() {
                                         <label htmlFor="wd-available-from"><b>Available from</b></label>
                                         <input
                                             id="wd-available-from"
-                                            value={`${from}`} type="date"
+                                            value={assignmentData.from}
+                                            type="date"
                                             className="form-control"
-                                            onChange={(e) => setFrom(e.target.value)} />
+                                            onChange={handleChange} />
                                     </div>
                                     <div className="col-md-6 mb-3">
                                         <label htmlFor="wd-available-until"><b>Until</b></label>
                                         <input
                                             id="wd-available-until"
-                                            value={`${to}`} type="date"
+                                            value={assignmentData.to}
+                                            type="date"
                                             className="form-control"
-                                            onChange={(e) => setTo(e.target.value)} />
+                                            onChange={handleChange} />
                                     </div>
                                 </div>
 
