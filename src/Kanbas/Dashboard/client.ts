@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_BASE = "http://localhost:4000/api";
+export const REMOTE_SERVER = process.env.REACT_APP_REMOTE_SERVER;
+const API_BASE = `${REMOTE_SERVER}/api`;
 const ENROLLMENTS_API = `${API_BASE}/users`;
 
 export const fetchEnrollments = async (userId : any) => {

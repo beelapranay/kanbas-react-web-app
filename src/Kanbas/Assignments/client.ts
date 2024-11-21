@@ -1,7 +1,8 @@
 import axios from "axios";
 
 // Define the base API URL
-const API_BASE = "http://localhost:4000/api";
+export const REMOTE_SERVER = process.env.REACT_APP_REMOTE_SERVER;
+const API_BASE = `${REMOTE_SERVER}/api`;
 
 // Fetch assignments for a specific course
 export const fetchAssignments = async (courseId: string) => {
