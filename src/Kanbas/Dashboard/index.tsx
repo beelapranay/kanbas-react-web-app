@@ -25,7 +25,7 @@ export default function Dashboard({
 
     const { currentUser } = useSelector((state: any) => state.accountReducer);
 
-    const handleAddNewCourse = async (newCourse: any) => {
+    const handleAddNewCourse = async () => {
         try {
             const addedCourse = await addNewCourse(); // Call the API to add the course
             setAllCourses((prevCourses) => [...prevCourses, addedCourse]); // Update local state
@@ -48,7 +48,7 @@ export default function Dashboard({
         } catch (error) {
             console.error("Failed to delete course:", error);
         }
-    };    
+    }; 
 
     const isFaculty = currentUser?.role === "FACULTY";
     const isStudent = currentUser?.role === "STUDENT";

@@ -8,7 +8,6 @@ import Inbox from "./Inbox";
 import "./styles.css";
 import Settings from "./Settings";
 import { useEffect, useState } from "react";
-import store from "./store";
 import ProtectedRoute from "./Account/ProtectedRoute";
 import Session from "./Account/Session";
 import * as userClient from "./Account/client";
@@ -29,6 +28,7 @@ export default function Kanbas({ currentUser }: { currentUser: any }) {
     const addNewCourse = async () => {
         const newCourse = await userClient.createCourse(course);
         setCourses([...courses, newCourse]);
+        return newCourse;
     };
 
     const deleteCourse = async (courseId: string) => {
