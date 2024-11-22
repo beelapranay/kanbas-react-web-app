@@ -86,9 +86,6 @@ export default function WorkingWithArraysAsynchronously() {
                                 }
                             />
                         )}
-                        <span style={{ textDecoration: todo.completed ? "line-through" : "none" }}>
-                            {todo.title}
-                        </span>
                         <FaTrash onClick={() => removeTodo(todo)}
                             className="text-danger float-end mt-1" id="wd-remove-todo" />
                         <TiDelete onClick={() => deleteTodo(todo)}

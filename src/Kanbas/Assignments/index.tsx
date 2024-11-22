@@ -10,7 +10,6 @@ import {
 import {
     setAssignments,
     addAssignment,
-    deleteAssignment,
     updateAssignment,
 } from "./reducer";
 import AssignmentControls from "./AssignmentControls";
@@ -31,22 +30,22 @@ export default function Assignments() {
 
     const [selectedAssignmentId, setSelectedAssignmentId] = useState<string | null>(null);
 
-    useEffect(() => {
-        const fetchAssignments = async () => {
-            if (!cid) {
-                console.error("Course ID is undefined.");
-                return;
-            }
-            try {
-                const data = await fetchAssignmentsAPI(cid);
-                dispatch(setAssignments(data));
-            } catch (error) {
-                console.error("Failed to fetch assignments:", error);
-            }
-        };
+    const fetchAssignments = async () => {
+        if (!cid) {
+            console.error("Course ID is undefined.");
+            return;
+        }
+        try {
+            const data = await fetchAssignmentsAPI(cid);
+            dispatch(setAssignments(data)); // Update Redux state
+        } catch (error) {
+            console.error("Failed to fetch assignments:", error);
+        }
+    };
 
+    useEffect(() => {
         fetchAssignments();
-    }, [cid, dispatch]);
+    }, [cid]);
 
     const courseAssignments = assignments.filter(
         (assignment: any) => assignment.course === cid
@@ -67,16 +66,19 @@ export default function Assignments() {
 
     const confirmDelete = async () => {
         if (selectedAssignmentId) {
+            console.log("Deleting assignment with ID:", selectedAssignmentId);
             try {
-                await deleteAssignmentAPI(selectedAssignmentId); // Delete from backend
-                dispatch(deleteAssignment(selectedAssignmentId)); // Update Redux store
-                setSelectedAssignmentId(null); // Reset local state
+                await deleteAssignmentAPI(selectedAssignmentId);
+                setSelectedAssignmentId(null);
+                fetchAssignments()
             } catch (error) {
                 console.error("Failed to delete assignment:", error);
             }
+        } else {
+            console.warn("No assignment ID selected for deletion.");
         }
-    };
-
+    }; 
+    
     const handleAddAssignment = async (newAssignment: any) => {
         try {
             const addedAssignment = await addAssignmentAPI(cid!, newAssignment);

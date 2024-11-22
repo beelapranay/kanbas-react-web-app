@@ -25,6 +25,15 @@ export default function Dashboard({
 
     const { currentUser } = useSelector((state: any) => state.accountReducer);
 
+    const handleAddNewCourse = async (newCourse: any) => {
+        try {
+            const addedCourse = await addNewCourse(); // Call the API to add the course
+            setAllCourses((prevCourses) => [...prevCourses, addedCourse]); // Update local state
+        } catch (error) {
+            console.error("Failed to add new course:", error);
+        }
+    };
+
     const handleUpdateCourse = async () => {
         updateCourse(); // Update in backend
         setAllCourses((prevCourses) =>
@@ -34,13 +43,12 @@ export default function Dashboard({
 
     const handleDeleteCourse = async (courseId: string) => {
         try {
-            await deleteCourse(courseId); // Call the API to delete the course
+            deleteCourse(courseId); // Call the API to delete the course
             setAllCourses((prevCourses) => prevCourses.filter((c) => c._id !== courseId)); // Update local state
         } catch (error) {
             console.error("Failed to delete course:", error);
         }
     };    
-    
 
     const isFaculty = currentUser?.role === "FACULTY";
     const isStudent = currentUser?.role === "STUDENT";
@@ -103,7 +111,7 @@ export default function Dashboard({
                         <button
                             className="btn btn-primary float-end"
                             id="wd-add-new-course-click"
-                            onClick={addNewCourse}
+                            onClick={handleAddNewCourse}
                         >
                             Add
                         </button>
@@ -166,6 +174,7 @@ export default function Dashboard({
             <div id="wd-dashboard-courses" className="row">
                 <div className="row row-cols-1 row-cols-md-5 g-4">
                     {filteredCourses.map((course) => {
+                        if (!course) return null;
                         const isEnrolled = userEnrollments.some((enrollment) => enrollment.course === course._id);
 
                         return (

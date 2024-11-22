@@ -198,10 +198,10 @@ export default function AssignmentEditor() {
                                 </div>
 
                                 <div className="col-md-6 mb-3">
-                                    <label htmlFor="wd-due"><b>Due</b></label>
+                                    <label htmlFor="due"><b>Due</b></label>
                                     <div className="input-group">
                                         <input
-                                            id="wd-due"
+                                            id="due"
                                             value={assignmentData.due}
                                             type="date"
                                             className="form-control"
@@ -212,18 +212,18 @@ export default function AssignmentEditor() {
 
                                 <div className="row">
                                     <div className="col-md-6 mb-3">
-                                        <label htmlFor="wd-available-from"><b>Available from</b></label>
+                                        <label htmlFor="from"><b>Available from</b></label>
                                         <input
-                                            id="wd-available-from"
+                                            id="from"
                                             value={assignmentData.from}
                                             type="date"
                                             className="form-control"
                                             onChange={handleChange} />
                                     </div>
                                     <div className="col-md-6 mb-3">
-                                        <label htmlFor="wd-available-until"><b>Until</b></label>
+                                        <label htmlFor="to"><b>Until</b></label>
                                         <input
-                                            id="wd-available-until"
+                                            id="to"
                                             value={assignmentData.to}
                                             type="date"
                                             className="form-control"

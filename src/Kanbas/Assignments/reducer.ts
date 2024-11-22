@@ -39,6 +39,7 @@ const assignmentsSlice = createSlice({
             state.assignments = state.assignments.filter(
                 (a) => a._id !== assignmentId
             );
+            console.log('Updated Assignments:', state.assignments);
         },
         updateAssignment: (state, { payload: assignment }) => {
             state.assignments = state.assignments.map((a) =>

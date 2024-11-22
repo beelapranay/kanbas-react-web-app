@@ -41,6 +41,7 @@ export const updateAssignmentAPI = async (assignmentId: string, updates: any) =>
 export const deleteAssignmentAPI = async (assignmentId: string) => {
     try {
         await axios.delete(`${API_BASE}/assignments/${assignmentId}`);
+        console.log("assignment deleted")
     } catch (error: any) {
         console.error("Error deleting assignment:", error.message);
         throw new Error(error.response?.data?.error || "Failed to delete assignment.");
