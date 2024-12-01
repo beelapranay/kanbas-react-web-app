@@ -5,6 +5,7 @@ export const USERS_API = `${REMOTE_SERVER}/api/users`;
 const axiosWithCredentials = axios.create({ withCredentials: true });
 
 export const signin = async (credentials: any) => {
+    console.log("Signing in with credentials:", credentials);
     const response = await axiosWithCredentials.post(`${USERS_API}/signin`, credentials);
     return response.data;
 };
