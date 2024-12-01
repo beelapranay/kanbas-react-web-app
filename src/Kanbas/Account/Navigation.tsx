@@ -1,10 +1,11 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 
 export default function AccountNavigation() {
     const { currentUser } = useSelector((state: any) => state.accountReducer);
     const links = currentUser ? ["Profile"] : ["Signin", "Signup"];
+    const active = (path: string) => (pathname.includes(path) ? "active" : "");
     const { pathname } = useLocation();
 
     return (
@@ -20,6 +21,8 @@ export default function AccountNavigation() {
                         {link}
                     </NavLink>
                 ))}
+                {currentUser && currentUser.role === "FACULTY" && (
+                    <Link to={`/Kanbas/Account/Users`} className={`list-group-item text-danger border border-0 ${active("Users")}`}> Users </Link>)}
             </div>
         </div>
     );
